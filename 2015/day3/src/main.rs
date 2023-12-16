@@ -7,12 +7,27 @@ fn main() -> std::io::Result<()> {
     let mut content = String::new();
     file.read_to_string(&mut content)?;
     let mut count = 0;
-    let mut coordinates_houses: HashMap<(i32, i32), i32> = HashMap::new();
+    let mut santa_coordinates_houses: HashMap<(i32, i32), i32> = HashMap::new();
+    let mut rsanta_coordinates_houses: HashMap<(i32, i32), i32> = HashMap::new();
 
-    let mut coordinates: (i32, i32) = (0, 0);
-    coordinates_houses.insert(coordinates, 1);
+    let mut santa_coordinates: (i32, i32) = (0, 0);
+    let mut rsanta_coordinates: (i32, i32) = (0, 0);
+    santa_coordinates_houses.insert(santa_coordinates, 1);
+    rsanta_coordinates_houses.insert(rsanta_coordinates, 1);
 
-    for char in content.chars() {
+    let mut hash_map_coordinates: &mut HashMap<(i32, i32), i32>;
+    let mut coordinates: &mut (i32, i32);
+
+    for (i, char) in content.chars().enumerate() {
+
+        if i % 2 != 0 {
+            hash_map_coordinates = &mut rsanta_coordinates_houses;
+            coordinates = &mut rsanta_coordinates;
+        } else {
+            hash_map_coordinates = &mut santa_coordinates_houses;
+            coordinates = &mut santa_coordinates;
+        }
+
         match char {
             '>' => {
                 coordinates.1 += 1;
@@ -33,11 +48,17 @@ fn main() -> std::io::Result<()> {
                 panic!();
             },
         }
-        coordinates_houses.entry(coordinates).and_modify(|coordinates| *coordinates += 1).or_insert(1);
+        hash_map_coordinates.entry(*coordinates).and_modify(|coordinates| *coordinates += 1).or_insert(1);
     }
 
-    for &gifts in coordinates_houses.values() {
+    for &gifts in santa_coordinates_houses.values() {
         if gifts > 0 {
+            count += 1;
+        }
+    }
+
+    for (coordinates, gifts) in rsanta_coordinates_houses {
+        if gifts > 0 && !santa_coordinates_houses.contains_key(&coordinates) {
             count += 1;
         }
     }
