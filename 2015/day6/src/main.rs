@@ -3,33 +3,29 @@ use std::io::{prelude::*, BufReader};
 use regex::Regex;
 
 struct Grid {
-    lights: [[i8; 1000]; 1000]
+    lights: [[i32; 1000]; 1000]
 }
 
 impl Grid {
     fn toggle(&mut self, line: usize, column: usize) {
-        if self.lights[line][column] == 0 {
-            self.lights[line][column] = 1
-        } else {
-            self.lights[line][column] = 0
-        }
+        self.lights[line][column] += 2
     }
 
     fn turn_on(&mut self, line: usize, column: usize) {
-        self.lights[line][column] = 1
+        self.lights[line][column] += 1
     }
 
     fn turn_off(&mut self, line: usize, column: usize) {
-        self.lights[line][column] = 0
+        if self.lights[line][column] > 0 {
+            self.lights[line][column] -= 1
+        }
     }
 
     fn how_many_on(&self) -> i32 {
-        let mut count = 0;
+        let mut count: i32 = 0;
         for line in self.lights.iter() {
             for column in line.iter() {
-                if *column == 1 {
-                    count += 1;
-                }
+                count += column;
             }
         }
         count
