@@ -123,6 +123,8 @@ fn main() -> std::io::Result<()> {
     let mut representation_gates: HashMap<String, String> = HashMap::new();
     let mut gates_to_values: HashMap<String, i64> = HashMap::new();
 
+    gates_to_values.insert(String::from("b"), 3176);
+
     for line in reader.lines() {
         let ref_to_line = &line?;
         let parts: Vec<&str> = ref_to_line.split(" -> ").collect();
