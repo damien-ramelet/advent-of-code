@@ -25,6 +25,14 @@ async function parseLists(filename: string): Promise<[ number[], number[] ]> {
 	return [leftList, rightList];
 }
 
+function countOccurrences(list: number[]) {
+	let occurrences: { [ index: string ] : number } = {};
+	for (let i = 0; i < list.length; i++) {
+		occurrences[list[i]] = occurrences[list[i]] ? occurrences[list[i]] + 1 : 1;
+	}
+	return occurrences;
+}
+
 let leftList: number[];
 let rightList: number[];
 parseLists("src/day1/training_set").then(([leftList, rightList]) => {
@@ -36,5 +44,35 @@ parseLists("src/day1/training_set").then(([leftList, rightList]) => {
 
 parseLists("src/day1/puzzle_input").then(([leftList, rightList]) => {
 	let result = pairUpList(leftList, rightList);
-	console.log(result);
+	console.log(`Day1 part1: ${result}`);
+});
+
+// day2
+
+leftList = [];
+rightList = [];
+
+parseLists("src/day1/training_set").then(([leftList, rightList]) => {
+	let occurrences = countOccurrences(rightList);
+	let similarity = 0;
+	for (let i = 0; i < leftList.length; i++) {
+		if (occurrences[leftList[i]]) {
+			similarity += Number(leftList[i]) * occurrences[leftList[i]];
+		}
+	}
+	console.assert(similarity === 31);
+});
+
+leftList = [];
+rightList = [];
+
+parseLists("src/day1/puzzle_input").then(([leftList, rightList]) => {
+	let occurrences = countOccurrences(rightList);
+	let similarity = 0;
+	for (let i = 0; i < leftList.length; i++) {
+		if (occurrences[leftList[i]]) {
+			similarity += Number(leftList[i]) * occurrences[leftList[i]];
+		}
+	}
+	console.log(`Day1 part2: ${similarity}`);
 });
