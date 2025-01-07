@@ -1,4 +1,5 @@
 */node_modules/*
+*/**/*.js
 puzzle_input
 training_set
 .yarn*
